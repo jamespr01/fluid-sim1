@@ -1,6 +1,8 @@
 #include <stdio.h>
-/*C hates multidimensional arrays, we'll use 1D arrays and fake the extra two dimensions.*/
+#include <stdlib.h>
+#include <math.h>
 
+/*C hates multidimensional arrays, we'll use 1D arrays and fake the extra two dimensions.*/
 #define IX(x, y) ((x) + (y) * N )
 
 // Creating cube of fluid: parameters

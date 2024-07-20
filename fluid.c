@@ -1,5 +1,6 @@
 #include <math.h>
-
+#include <stdio.h>
+#include <stdlib.h>
 
 #define IX(x, y, z) ((x) + (y) * N + (z) * N * N)
 
@@ -21,8 +22,7 @@ struct FluidCube {
     float *Vy0;
     float *Vz0;
 };
-
-
+typedef struct FluidCube FluidCube;
 
 FluidCube *FluidCubeCreate(int size, int diffusion, int viscosity, float dt)
 {
