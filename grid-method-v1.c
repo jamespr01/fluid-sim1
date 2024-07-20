@@ -32,14 +32,14 @@ FluidCube *FluidCubeCreate(int size, int diffusion, int viscosity, float dt)
     cube->diff = diffusion;
     cube->visc = viscosity;
     
-    cube->s = calloc(N * N * N, sizeof(float));
-    cube->density = calloc(N * N * N, sizeof(float));
+    cube->s = calloc(N * N , sizeof(float));
+    cube->density = calloc(N * N, sizeof(float));
     
-    cube->Vx = calloc(N * N * N, sizeof(float));
-    cube->Vy = calloc(N * N * N, sizeof(float));
+    cube->Vx = calloc(N * N , sizeof(float));
+    cube->Vy = calloc(N * N , sizeof(float));
     
-    cube->Vx0 = calloc(N * N * N, sizeof(float));
-    cube->Vy0 = calloc(N * N * N, sizeof(float));
+    cube->Vx0 = calloc(N * N , sizeof(float));
+    cube->Vy0 = calloc(N * N , sizeof(float));
     
     return cube;
 }
@@ -101,12 +101,12 @@ static void lin_solve(int b, float *x, float *x0, float a, float c, int iter, in
     for (int k = 0; k < iter; k++) {
             for (int j = 1; j < N - 1; j++) {
                 for (int i = 1; i < N - 1; i++) {
-                    x[IX(i, j, m)] =
+                    x[IX(i, j)] =
                         (x0[IX(i, j)]
-                            + a*(    x[IX(i+1, j  , m  )]
-                                    +x[IX(i-1, j  , m  )]
-                                    +x[IX(i  , j+1, m  )]
-                                    +x[IX(i  , j-1, m  )]
+                            + a*(    x[IX(i+1, j )]
+                                    +x[IX(i-1, j )]
+                                    +x[IX(i  , j+1 )]
+                                    +x[IX(i  , j-1 )]
                            )) * cRecip;
                 }
             }
@@ -127,10 +127,10 @@ static void project(float *velocX, float *velocY, float *p, float *div, int iter
     for (int j = 1; j < N - 1; j++) {
         for (int i = 1; i < N - 1; i++) {
             div[IX(i, j)] = -0.5f*(
-                     velocX[IX(i+1, j  , k  )]
-                    -velocX[IX(i-1, j  , k  )]
-                    +velocY[IX(i  , j+1, k  )]
-                    -velocY[IX(i  , j-1, k  )]
+                     velocX[IX(i+1, j )]
+                    -velocX[IX(i-1, j )]
+                    +velocY[IX(i  , j+1 )]
+                    -velocY[IX(i  , j-1 )]
                 )/N;
                 p[IX(i, j)] = 0;
             }
@@ -168,8 +168,8 @@ static void advect(int b, float *d, float *d0,  float *velocX, float *velocY, fl
     
         for(j = 1, jfloat = 1; j < N - 1; j++, jfloat++) { 
             for(i = 1, ifloat = 1; i < N - 1; i++, ifloat++) {
-                tmp1 = dtx * velocX[IX(i, j, k)];
-                tmp2 = dty * velocY[IX(i, j, k)];
+                tmp1 = dtx * velocX[IX(i, j)];
+                tmp2 = dty * velocY[IX(i, j)];
                 x    = ifloat - tmp1; 
                 y    = jfloat - tmp2;
                 
